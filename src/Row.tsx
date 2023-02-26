@@ -1,7 +1,7 @@
 import Box from './Box';
 import styled from 'styled-components';
 
-const RowElement = styled.div<{}>`
+const RowElement = styled.div`
     display: flex;
     flex-direction: row;
     gap: 3px;

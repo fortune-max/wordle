@@ -1,7 +1,7 @@
 import Row from './Row';
 import styled from 'styled-components';
 
-const BoardElement = styled.div<{}>`
+const BoardElement = styled.div`
     display: flex;
     flex-direction: column;
     gap: 3px;
