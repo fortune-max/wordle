@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const BoxElement = styled.div<{boxState?: "incorrect" | "correct" | "misplaced" | "empty"}>`
+const BoxElement = styled.div<{boxState?: "incorrect" | "correct" | "misplaced" | "empty" | "default"}>`
     width: 50px;
     height: 50px;
     color: #ffffff;
@@ -19,17 +19,19 @@ const BoxElement = styled.div<{boxState?: "incorrect" | "correct" | "misplaced" 
                 return "#b59f3b";
             case "empty":
                 return "#121213";
+            case "default":
+                return "#818384";
         }
     }};
 `;
 
 function Box({ boxState, children } : {
-    boxState: "incorrect" | "correct" | "misplaced" | "empty";
+    boxState: "incorrect" | "correct" | "misplaced" | "empty" | "default";
     children?: React.ReactNode;
 }) {
     return (
         <BoxElement boxState={boxState}>
-            {children?.toString().toUpperCase()}
+            {children}
         </BoxElement>
     );
 }
