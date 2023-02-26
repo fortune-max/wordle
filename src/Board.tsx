@@ -19,8 +19,8 @@ function Board({ rowCount, guesses, correctWord, currentGuess, wordLength } : {
             {guesses.map((guess, index) => {
                 return <Row key={index} currentWord={guess} correctWord={correctWord} wordLength={wordLength} />;
             })}
-            <Row key={guesses.length} currentWord={currentGuess} correctWord={correctWord} wordLength={wordLength} isActiveRow={true}/>
-            {Array(rowCount - guesses.length - 1).fill(0).map((_, index) => {
+            {(guesses.length < rowCount) && <Row key={guesses.length} currentWord={currentGuess} correctWord={correctWord} wordLength={wordLength} isActiveRow /> }
+            {Array(Math.max(rowCount - guesses.length - 1, 0)).fill(0).map((_, index) => {
                 return <Row key={guesses.length + index + 1} currentWord={""} correctWord={correctWord} wordLength={wordLength} />;
             })}
         </BoardElement>
