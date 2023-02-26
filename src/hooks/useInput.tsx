@@ -39,7 +39,7 @@ function useInput(
                 if (guesses.at(-1) === correctWord) return;
                 setCurrentGuess("");
             } else if (key === "ArrowUp") {
-                setRowCount(Math.max(rowCount - 1, 1));
+                setRowCount(Math.max(rowCount - 1, guesses.length + 1));
             } else if (key === "ArrowDown") {
                 setRowCount(Math.min(rowCount + 1, 10));
             } else if (key === "ArrowLeft") {
@@ -48,6 +48,15 @@ function useInput(
             } else if (key === "ArrowRight") {
                 setWordLength(Math.min(wordLength + 1, 10));
                 setGuesses([]);
+            } else if (key === " ") {
+                fetch(`https://random-word-api.herokuapp.com/word?length=${wordLength}`)
+                .then((response) => response.json())
+                .then((data) => {
+                    setCorrectWord(data[0].toUpperCase());
+                    setWordLength(data[0].length);
+                    setGuesses([]);
+                    setCurrentGuess("");
+                });
             }
         };
 

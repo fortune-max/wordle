@@ -41,7 +41,7 @@ function Keyboard({ guesses, correctWord } : {
     ];
 
     useEffect(() => {
-        if (guesses.length === 0) return;
+        if (guesses.length === 0) setLetterState({});
         const lastGuess = guesses.at(-1);
         lastGuess?.split("").forEach((letter, index) => {
             if (correctWord[index] === letter) {
