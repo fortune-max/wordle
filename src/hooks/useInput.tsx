@@ -22,7 +22,7 @@ function useInput(
                 }
             } else if ((keyCode >= 65 && keyCode <= 90) || (keyCode >= 97 && keyCode <= 122)) {
                 if (currentGuess.length < wordLength)
-                    setCurrentGuess(currentGuess + key);
+                    setCurrentGuess(currentGuess + key.toUpperCase());
             } else if (key === "Escape") {
                 setCurrentGuess("");
             } else if (key === "ArrowUp") {
