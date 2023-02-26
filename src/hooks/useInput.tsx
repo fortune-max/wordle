@@ -15,10 +15,10 @@ function useInput(
     useEffect(() => {
         const keyHandler = (key: string, keyCode: number) => {
             if (key === "Backspace") {
-                if (guesses.at(-1) === correctWord) return;
+                if (guesses.at(-1) === correctWord || guesses.length === rowCount) return;
                 setCurrentGuess(currentGuess.slice(0, -1));
             } else if (key === "Enter") {
-                if (guesses.at(-1) === correctWord) return;
+                if (guesses.at(-1) === correctWord || guesses.length === rowCount) return;
                 if (currentGuess.length === wordLength && guesses.length < rowCount){
                     fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + currentGuess)
                         .then((response) => response.json())
@@ -32,11 +32,11 @@ function useInput(
                         });
                 }
             } else if ((keyCode >= 65 && keyCode <= 90) || (keyCode >= 97 && keyCode <= 122)) {
-                if (guesses.at(-1) === correctWord) return;
+                if (guesses.at(-1) === correctWord || guesses.length === rowCount) return;
                 if (currentGuess.length < wordLength)
                     setCurrentGuess(currentGuess + key.toUpperCase());
             } else if (key === "Escape") {
-                if (guesses.at(-1) === correctWord) return;
+                if (guesses.at(-1) === correctWord || guesses.length === rowCount) return;
                 setCurrentGuess("");
             } else if (key === "ArrowUp") {
                 setRowCount(Math.max(rowCount - 1, guesses.length + 1));

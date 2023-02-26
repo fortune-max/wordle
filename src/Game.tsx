@@ -3,6 +3,7 @@ import Board from './Board';
 import useInput from './hooks/useInput';
 import Keyboard from './Keyboard';
 import styled from 'styled-components';
+import image from "./wordle_logo.png";
 
 const GameElement = styled.div`
     display: flex;
@@ -11,6 +12,10 @@ const GameElement = styled.div`
     height: 100vh;
     justify-content: space-around;
     gap: 3px;
+`;
+
+const Logo = styled.img`
+    width: 200px;
 `;
 
 function Game() {
@@ -33,6 +38,7 @@ function Game() {
 
     return (
         <GameElement>
+            <Logo src={image} alt="Wordle Logo" />
             <Board correctWord={correctWord} rowCount={rowCount} guesses={guesses} currentGuess={currentGuess} wordLength={wordLength} />
             <Keyboard guesses={guesses} correctWord={correctWord} />
         </GameElement>
