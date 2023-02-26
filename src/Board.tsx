@@ -20,7 +20,7 @@ function Board({ rowCount, guesses, correctWord, currentGuess, wordLength } : {
             {guesses.map((guess, index) => {
                 return <Row key={index} currentWord={guess} correctWord={correctWord} wordLength={wordLength} />;
             })}
-            <Row key={guesses.length} currentWord={currentGuess} correctWord={correctWord} wordLength={wordLength} />
+            <Row key={guesses.length} currentWord={currentGuess} correctWord={correctWord} wordLength={wordLength} isActiveRow={true}/>
             {Array(rowCount - guesses.length).fill(0).map((_, index) => {
                 return <Row key={guesses.length + index + 1} currentWord={""} correctWord={correctWord} wordLength={wordLength} />;
             })}
