@@ -8,6 +8,7 @@ const BoxElement = styled.div<{boxState?: "incorrect" | "correct" | "misplaced" 
     text-align: center;
     vertical-align: middle;
     line-height: 50px;
+    font-weight: bold;
     background-color: ${(props) => {
         switch (props.boxState) {
             case "incorrect":
@@ -28,7 +29,7 @@ function Box({ boxState, children } : {
 }) {
     return (
         <BoxElement boxState={boxState}>
-            {children}
+            {children?.toString().toUpperCase()}
         </BoxElement>
     );
 }
