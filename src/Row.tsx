@@ -28,7 +28,7 @@ function Row({ currentWord, correctWord, wordLength, isActiveRow } : {
             {
                 Array(wordLength).fill(0).map((_, index) => {
                     if (index < currentWord.length) {
-                        return <Box key={index} boxState={isActiveRow ? "empty" : getBoxState(currentWord[index], index, correctWord)}>{currentWord[index]}</Box>;
+                        return <Box key={index} boxState={isActiveRow ? "empty" : getBoxState(currentWord[index], index, correctWord)} letter={currentWord[index]} />;
                     } else {
                         return <Box key={index} boxState="empty" />;
                     }

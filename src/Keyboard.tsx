@@ -22,7 +22,7 @@ function KeyboardRow({ keys, letterState } : {
     return (
         <KeyboardRowElement>
             {keys.map((key, index) => {
-                return <Box key={index} boxState={letterState[key] || "default"}>{key}</Box>;
+                return <Box key={index} boxState={letterState[key] || "default"} clickable={true} letter={key} />;
             })}
         </KeyboardRowElement>
     );

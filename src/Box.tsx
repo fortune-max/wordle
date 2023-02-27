@@ -1,7 +1,6 @@
-import React from 'react';
 import styled from 'styled-components';
 
-const BoxElement = styled.div<{boxState?: "incorrect" | "correct" | "misplaced" | "empty" | "default"}>`
+const BoxElement = styled.div<{boxState?: "incorrect" | "correct" | "misplaced" | "empty" | "default", clickable?: boolean}>`
     width: 50px;
     height: 50px;
     color: #ffffff;
@@ -23,15 +22,23 @@ const BoxElement = styled.div<{boxState?: "incorrect" | "correct" | "misplaced" 
                 return "#818384";
         }
     }};
+    cursor: ${(props) => props.clickable ? "pointer" : "default"};
 `;
 
-function Box({ boxState, children } : {
+function sendKeyEvent(key: string | undefined) {
+    window.dispatchEvent(
+        new KeyboardEvent("keydown", { key, keyCode: key?.charCodeAt(0)})
+    );
+}
+
+function Box({ boxState, letter, clickable } : {
     boxState: "incorrect" | "correct" | "misplaced" | "empty" | "default";
-    children?: React.ReactNode;
+    letter?: string;
+    clickable?: boolean;
 }) {
     return (
-        <BoxElement boxState={boxState}>
-            {children}
+        <BoxElement boxState={boxState} onClick={()=>clickable && sendKeyEvent(letter)}>
+            {letter}
         </BoxElement>
     );
 }
