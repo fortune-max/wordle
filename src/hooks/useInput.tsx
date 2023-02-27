@@ -24,11 +24,14 @@ function useInput(
                         .then((response) => response.json())
                         .then((data) => {
                             if (data.title !== "No Definitions Found" || currentGuess === correctWord) {
+                                if (currentGuess === correctWord)
+                                    setTimeout(() => alert("You win! :D"), 200);
+                                if (currentGuess !== correctWord && guesses.length === rowCount - 1)
+                                    setTimeout(() => alert("You lose! :("), 200);
                                 setGuesses([...guesses, currentGuess]);
                                 setCurrentGuess("");
-                            } else {
-                                // TODO: Add a way to show the user that the word is not in the dictionary
-                            }
+                            } else
+                                alert("Word not valid");
                         });
                 }
             } else if ((keyCode >= 65 && keyCode <= 90) || (keyCode >= 97 && keyCode <= 122)) {
