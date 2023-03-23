@@ -27,7 +27,7 @@ function useInput(
                                 if (currentGuess === correctWord)
                                     setTimeout(() => alert("You win! :D"), 200);
                                 if (currentGuess !== correctWord && guesses.length === rowCount - 1)
-                                    setTimeout(() => alert("You lose! :("), 200);
+                                    setTimeout(() => alert(`You lose! :(\nCorrect word: ${correctWord}`), 200);
                                 setGuesses([...guesses, currentGuess]);
                                 setCurrentGuess("");
                             } else

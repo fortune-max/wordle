@@ -70,7 +70,7 @@ function Keyboard({ guesses, correctWord } : {
                 });
             }
         });
-    }, [guesses, correctWord]);
+    }, [guesses, correctWord, letterState]);
 
     return (
         <KeyboardElement>
