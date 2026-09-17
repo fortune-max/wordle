@@ -6,6 +6,8 @@ function useInput(
     currentGuess: string,
     wordLength: number,
     correctWord: string,
+    validWords: Set<string> | null,
+    pickWord: (length: number) => string | null,
     setCorrectWord: (correctWord: string) => void,
     setCurrentGuess: (currentGuess: string) => void,
     setGuesses: (guesses: string[]) => void,
@@ -20,19 +22,17 @@ function useInput(
             } else if (key === "Enter") {
                 if (guesses.at(-1) === correctWord || guesses.length === rowCount) return;
                 if (currentGuess.length === wordLength && guesses.length < rowCount){
-                    fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + currentGuess)
-                        .then((response) => response.json())
-                        .then((data) => {
-                            if (data.title !== "No Definitions Found" || currentGuess === correctWord) {
-                                if (currentGuess === correctWord)
-                                    setTimeout(() => alert("You win! :D"), 200);
-                                if (currentGuess !== correctWord && guesses.length === rowCount - 1)
-                                    setTimeout(() => alert(`You lose! :(\nCorrect word: ${correctWord}`), 200);
-                                setGuesses([...guesses, currentGuess]);
-                                setCurrentGuess("");
-                            } else
-                                alert("Word not valid");
-                        });
+                    // Word list still loading: accept the guess rather than block play.
+                    if (validWords && !validWords.has(currentGuess)) {
+                        alert("Word not valid");
+                        return;
+                    }
+                    if (currentGuess === correctWord)
+                        setTimeout(() => alert("You win! :D"), 200);
+                    if (currentGuess !== correctWord && guesses.length === rowCount - 1)
+                        setTimeout(() => alert(`You lose! :(\nCorrect word: ${correctWord}`), 200);
+                    setGuesses([...guesses, currentGuess]);
+                    setCurrentGuess("");
                 }
             } else if ((keyCode >= 65 && keyCode <= 90) || (keyCode >= 97 && keyCode <= 122)) {
                 if (guesses.at(-1) === correctWord || guesses.length === rowCount) return;
@@ -52,14 +52,11 @@ function useInput(
                 setWordLength(Math.min(wordLength + 1, 10));
                 setGuesses([]);
             } else if (key === " ") {
-                fetch(`https://random-word-api.herokuapp.com/word?length=${wordLength}`)
-                .then((response) => response.json())
-                .then((data) => {
-                    setCorrectWord(data[0].toUpperCase());
-                    setWordLength(data[0].length);
-                    setGuesses([]);
-                    setCurrentGuess("");
-                });
+                const word = pickWord(wordLength);
+                if (!word) return;
+                setCorrectWord(word);
+                setGuesses([]);
+                setCurrentGuess("");
             }
         };
 
@@ -70,7 +67,7 @@ function useInput(
         return () => {
             window.removeEventListener("keydown", handleKeyPress);
         };
-    }, [currentGuess, guesses, rowCount, wordLength, correctWord, setCorrectWord, setCurrentGuess, setGuesses, setRowCount, setWordLength]);
+    }, [currentGuess, guesses, rowCount, wordLength, correctWord, validWords, pickWord, setCorrectWord, setCurrentGuess, setGuesses, setRowCount, setWordLength]);
 }
 
 export default useInput;
