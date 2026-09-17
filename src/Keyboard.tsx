@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 import Box from './Box';
 import styled from 'styled-components';
 
@@ -32,45 +32,26 @@ function Keyboard({ guesses, correctWord } : {
     guesses: string[];
     correctWord: string;
 }) {
-    const [letterState, setLetterState] = useState<{[key: string]: "default" | "incorrect" | "correct" | "misplaced"}>({});
-    
     const keys = [
         ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
         ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
         ['Z', 'X', 'C', 'V', 'B', 'N', 'M']
     ];
 
-    useEffect(() => {
-        if (guesses.length === 0) setLetterState({});
-        const lastGuess = guesses.at(-1);
-        lastGuess?.split("").forEach((letter, index) => {
-            if (correctWord[index] === letter) {
-                if (letterState[letter] === "correct") return;
-                setLetterState((prevState) => {
-                    return {
-                        ...prevState,
-                        [letter]: "correct"
-                    };
-                });
-            } else if (correctWord.includes(letter)) {
-                if (letterState[letter] === "correct") return;
-                setLetterState((prevState) => {
-                    return {
-                        ...prevState,
-                        [letter]: "misplaced"
-                    };
-                });
-            } else {
-                if (letterState[letter] === "correct" || letterState[letter] === "misplaced") return;
-                setLetterState((prevState) => {
-                    return {
-                        ...prevState,
-                        [letter]: "incorrect"
-                    };
-                });
-            }
+    const letterState = useMemo(() => {
+        const state: {[key: string]: "default" | "incorrect" | "correct" | "misplaced"} = {};
+        guesses.forEach((guess) => {
+            guess.split("").forEach((letter, index) => {
+                if (correctWord[index] === letter)
+                    state[letter] = "correct";
+                else if (state[letter] !== "correct" && correctWord.includes(letter))
+                    state[letter] = "misplaced";
+                else if (state[letter] === undefined)
+                    state[letter] = "incorrect";
+            });
         });
-    }, [guesses, correctWord, letterState]);
+        return state;
+    }, [guesses, correctWord]);
 
     return (
         <KeyboardElement>

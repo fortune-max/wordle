@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import Board from './Board';
 import useInput from './hooks/useInput';
 import Keyboard from './Keyboard';
@@ -24,17 +24,33 @@ function Game() {
     const [guesses, setGuesses] = useState<string[]>([]);
     const [currentGuess, setCurrentGuess] = useState<string>("");
     const [wordLength, setWordLength] = useState<number>(5);
+    const [words, setWords] = useState<{[length: string]: string[]} | null>(null);
 
     useEffect(() => {
-        fetch(`https://random-word-api.herokuapp.com/word?length=${wordLength}`)
+        fetch(`${process.env.PUBLIC_URL}/words.json`)
             .then((response) => response.json())
-            .then((data) => {
-                setCorrectWord(data[0].toUpperCase());
-                setWordLength(data[0].length);
-            });
-    }, [wordLength]);
+            .then((data: {[length: string]: string[]}) => setWords(data))
+            // Without the list every guess is accepted, so the game stays playable.
+            .catch(() => setWords(null));
+    }, []);
 
-    useInput(rowCount, guesses, currentGuess, wordLength, correctWord, setCorrectWord, setCurrentGuess, setGuesses, setRowCount, setWordLength);
+    const validWords = useMemo(
+        () => words && new Set(Object.values(words).flat()),
+        [words]
+    );
+
+    const pickWord = useCallback((length: number) => {
+        const pool = words?.[length];
+        if (!pool) return null;
+        return pool[Math.floor(Math.random() * pool.length)];
+    }, [words]);
+
+    useEffect(() => {
+        const word = pickWord(wordLength);
+        if (word) setCorrectWord(word);
+    }, [wordLength, pickWord]);
+
+    useInput(rowCount, guesses, currentGuess, wordLength, correctWord, validWords, pickWord, setCorrectWord, setCurrentGuess, setGuesses, setRowCount, setWordLength);
 
     return (
         <GameElement>
